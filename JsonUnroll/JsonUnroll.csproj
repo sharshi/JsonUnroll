@@ -15,7 +15,6 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>json, flatten, utilities</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
