@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    <PackageId>Sharshi.JsonUnroll</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>S.b.</Authors>
+    <Description>Unroll Json</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/sharshi</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sharshi.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>json, flatten, utilities</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>

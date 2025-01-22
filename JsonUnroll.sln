@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonUnroll", "JsonUnroll\JsonUnroll.csproj", "{461D411C-931F-4FBB-AB6C-D0BBD2C124F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonUnrollTest", "JsonUnrollTest\JsonUnrollTest.csproj", "{2F7313B0-BEF6-4710-BD75-83E97670DC95}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{461D411C-931F-4FBB-AB6C-D0BBD2C124F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{461D411C-931F-4FBB-AB6C-D0BBD2C124F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{461D411C-931F-4FBB-AB6C-D0BBD2C124F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{461D411C-931F-4FBB-AB6C-D0BBD2C124F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F7313B0-BEF6-4710-BD75-83E97670DC95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F7313B0-BEF6-4710-BD75-83E97670DC95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F7313B0-BEF6-4710-BD75-83E97670DC95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F7313B0-BEF6-4710-BD75-83E97670DC95}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
