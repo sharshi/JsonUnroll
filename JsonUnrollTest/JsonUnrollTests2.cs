@@ -1,20 +1,20 @@
-namespace JsonUnrollTest;
+﻿namespace JsonUnrollTest;
 
 using Newtonsoft.Json.Linq;
 using Xunit;
 using JsonUnroll;
 
-public class JsonUnrollTests
+public class JsonUnrollTests2
 {
     [Fact]
     public void Flatten_SimpleObject_ReturnsSingleRow()
     {
         // Arrange
         var json = @"{ ""name"": ""John"", ""age"": 30 }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll2.Prepare(json);
 
         // Act
-        var result = JsonUnroll.Flatten(token);
+        var result = JsonUnroll2.Flatten(token);
 
         // Assert
         Assert.Single(result);
@@ -27,10 +27,10 @@ public class JsonUnrollTests
     {
         // Arrange
         var json = @"{ ""hobbies"": [""reading"", ""swimming""] }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll2.Prepare(json);
 
         // Act
-        var result = JsonUnroll.Flatten(token);
+        var result = JsonUnroll2.Flatten(token);
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -54,10 +54,10 @@ public class JsonUnrollTests
                 { ""type"": ""phone"", ""value"": ""123-456"" }
             ]
         }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll2.Prepare(json);
 
         // Act
-        var result = JsonUnroll.Flatten(token);
+        var result = JsonUnroll2.Flatten(token);
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -77,10 +77,10 @@ public class JsonUnrollTests
                 ""zip"": 10001
             }
         }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll2.Prepare(json);
 
         // Act
-        var result = JsonUnroll.Flatten(token);
+        var result = JsonUnroll2.Flatten(token);
 
         // Assert
         Assert.Single(result);
@@ -102,10 +102,10 @@ public class JsonUnrollTests
                 ]
             }
         ]";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll2.Prepare(json);
 
         // Act
-        var result = JsonUnroll.Flatten(token);
+        var result = JsonUnroll2.Flatten(token);
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -143,31 +143,31 @@ public class JsonUnrollTests
                 ]
             }
         ]";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll2.Prepare(json);
 
         // Act
-        var result = JsonUnroll.Flatten(token);
+        var result = JsonUnroll2.Flatten(token);
 
         // Assert
         Assert.Equal(5, result.Count);
 
         // Verify John's first contact
-        Assert.Equal("John Doe", result[0]["name"]);
+        Assert.Equal("John Doe", result[0]["name"].ToString());
         Assert.Equal("30", result[0]["age"].ToString());
-        Assert.Equal("123 Main St", result[0]["address.street"]);
-        Assert.Equal("email", result[0]["contacts.type"]);
-        Assert.Equal("phone", result[1]["contacts.type"]);
-        Assert.Equal("reading", result[0]["hobbies"]);
-        Assert.Equal("reading", result[1]["hobbies"]);
-        Assert.Equal("email", result[2]["contacts.type"]);
-        Assert.Equal("phone", result[3]["contacts.type"]);
-        Assert.Equal("traveling", result[2]["hobbies"]);
-        Assert.Equal("traveling", result[3]["hobbies"]);
+        Assert.Equal("123 Main St", result[0]["address.street"].ToString());
+        Assert.Equal("email", result[0]["contacts.type"].ToString());
+        Assert.Equal("phone", result[1]["contacts.type"].ToString());
+        Assert.Equal("reading", result[0]["hobbies"].ToString());
+        Assert.Equal("reading", result[1]["hobbies"].ToString());
+        Assert.Equal("email", result[2]["contacts.type"].ToString());
+        Assert.Equal("phone", result[3]["contacts.type"].ToString());
+        Assert.Equal("traveling", result[2]["hobbies"].ToString());
+        Assert.Equal("traveling", result[3]["hobbies"].ToString());
 
         // Verify Jane's contact
-        Assert.Equal("Jane Doe", result[4]["name"]);
-        Assert.Equal("skiing", result[4]["hobbies"]);
-        Assert.Equal("jane@example.com", result[4]["contacts.value"]);
+        Assert.Equal("Jane Doe", result[4]["name"].ToString());
+        Assert.Equal("skiing", result[4]["hobbies"].ToString());
+        Assert.Equal("jane@example.com", result[4]["contacts.value"].ToString());
     }
 
     [Fact]
@@ -175,10 +175,10 @@ public class JsonUnrollTests
     {
         // Arrange
         var json = @"{ ""contacts"": [] }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll2.Prepare(json);
 
         // Act
-        var result = JsonUnroll.Flatten(token);
+        var result = JsonUnroll2.Flatten(token);
 
         // Assert
         Assert.NotEmpty(result);
@@ -196,10 +196,10 @@ public class JsonUnrollTests
                 ]
             }
         }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll2.Prepare(json);
 
         // Act
-        var result = JsonUnroll.Flatten(token);
+        var result = JsonUnroll2.Flatten(token);
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -213,10 +213,10 @@ public class JsonUnrollTests
         // Arrange
         var json = TestData.LargeJsonArray;
 
-        var token = JToken.Parse(json);
+        var token = JsonUnroll2.Prepare(json);
 
         // Act
-        var result = JsonUnroll.Flatten(token);
+        var result = JsonUnroll2.Flatten(token);
 
         // Assert
         Assert.NotNull(result);
