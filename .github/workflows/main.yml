@@ -1,0 +1,24 @@
+name: publish package
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  publish-package:
+    runs-on: ubuntu-latest
+    name: build and publish NuGet package
+    env:
+      PROJECT_PATH: './src/${{ github.event.inputs.package-name }}'
+    steps:
+     - uses: actions/checkout@master
+     - name: setup .NET Core
+       uses: actions/setup-dotnet@v3
+       env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+     - name: build
+       run: dotnet build 'JsonUnroll/JsonUnroll.csproj' --configuration Release
+     - name: pack
+       run: dotnet pack 'JsonUnroll/JsonUnroll.csproj' --output nuget-packages --configuration Release --no-build
+     - name: push package
+       run: dotnet nuget push nuget-packages/*.nupkg
