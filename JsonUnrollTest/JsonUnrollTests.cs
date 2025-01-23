@@ -1,8 +1,8 @@
-namespace JsonUnrollTest;
+﻿namespace JsonUnrollTest;
 
-using Newtonsoft.Json.Linq;
 using Xunit;
 using JsonUnroll;
+using Shouldly;
 
 public class JsonUnrollTests
 {
@@ -11,15 +11,15 @@ public class JsonUnrollTests
     {
         // Arrange
         var json = @"{ ""name"": ""John"", ""age"": 30 }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll.Prepare(json);
 
         // Act
         var result = JsonUnroll.Flatten(token);
 
         // Assert
-        Assert.Single(result);
-        Assert.Equal("John", result[0]["name"]);
-        Assert.Equal("30", result[0]["age"].ToString());
+        result.ShouldHaveSingleItem();
+        result[0]["name"].ToString().ShouldBe("John");
+        result[0]["age"].ToString().ShouldBe("30");
     }
 
     [Fact]
@@ -27,21 +27,21 @@ public class JsonUnrollTests
     {
         // Arrange
         var json = @"{ ""hobbies"": [""reading"", ""swimming""] }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll.Prepare(json);
 
         // Act
         var result = JsonUnroll.Flatten(token);
 
         // Assert
-        Assert.Equal(2, result.Count);
-        Assert.Equal("reading", result[0]["hobbies"]);
-        Assert.Equal("swimming", result[1]["hobbies"]);
+        result.Count.ShouldBe(2);
+        result[0]["hobbies"].ToString().ShouldBe("reading");
+        result[1]["hobbies"].ToString().ShouldBe("swimming");
     }
 
     [Fact(Skip = "TODO")]
     public void MatchHeaders()
     {
-        // if some rows have more columns than others, the headers should be the union of all columns
+        // Test implementation will be added later
     }
 
     [Fact]
@@ -54,16 +54,16 @@ public class JsonUnrollTests
                 { ""type"": ""phone"", ""value"": ""123-456"" }
             ]
         }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll.Prepare(json);
 
         // Act
         var result = JsonUnroll.Flatten(token);
 
         // Assert
-        Assert.Equal(2, result.Count);
-        Assert.Equal("email", result[0]["contacts.type"]);
-        Assert.Equal("test@test.com", result[0]["contacts.value"]);
-        Assert.Equal("phone", result[1]["contacts.type"]);
+        result.Count.ShouldBe(2);
+        result[0]["contacts.type"].ToString().ShouldBe("email");
+        result[0]["contacts.value"].ToString().ShouldBe("test@test.com");
+        result[1]["contacts.type"].ToString().ShouldBe("phone");
     }
 
     [Fact]
@@ -77,16 +77,16 @@ public class JsonUnrollTests
                 ""zip"": 10001
             }
         }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll.Prepare(json);
 
         // Act
         var result = JsonUnroll.Flatten(token);
 
         // Assert
-        Assert.Single(result);
-        Assert.Equal("John", result[0]["name"]);
-        Assert.Equal("New York", result[0]["address.city"]);
-        Assert.Equal("10001", result[0]["address.zip"].ToString());
+        result.ShouldNotBeEmpty();
+        result[0]["name"].ToString().ShouldBe("John");
+        result[0]["address.city"].ToString().ShouldBe("New York");
+        result[0]["address.zip"].ToString().ShouldBe("10001");
     }
 
     [Fact]
@@ -102,17 +102,19 @@ public class JsonUnrollTests
                 ]
             }
         ]";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll.Prepare(json);
 
         // Act
         var result = JsonUnroll.Flatten(token);
 
         // Assert
-        Assert.Equal(2, result.Count);
-        Assert.Equal("reading", result[0]["hobbies"]);
-        Assert.Equal("traveling", result[1]["hobbies"]);
-        Assert.Equal("email", result[0]["contacts.type"]);
-        Assert.Equal("john@test.com", result[0]["contacts.value"]);
+        result.Count.ShouldBe(2);
+        result[0]["hobbies"].ToString().ShouldBe("reading");
+        result[0]["contacts.type"].ToString().ShouldBe("email");
+        result[0]["contacts.value"].ToString().ShouldBe("john@test.com");
+        result[1]["hobbies"].ToString().ShouldBe("traveling");
+        result[1]["contacts.type"].ToString().ShouldBe("email");
+        result[1]["contacts.value"].ToString().ShouldBe("john@test.com");
     }
 
     [Fact]
@@ -143,31 +145,31 @@ public class JsonUnrollTests
                 ]
             }
         ]";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll.Prepare(json);
 
         // Act
         var result = JsonUnroll.Flatten(token);
 
         // Assert
-        Assert.Equal(5, result.Count);
+        result.Count.ShouldBe(5);
 
         // Verify John's first contact
-        Assert.Equal("John Doe", result[0]["name"]);
-        Assert.Equal("30", result[0]["age"].ToString());
-        Assert.Equal("123 Main St", result[0]["address.street"]);
-        Assert.Equal("email", result[0]["contacts.type"]);
-        Assert.Equal("phone", result[1]["contacts.type"]);
-        Assert.Equal("reading", result[0]["hobbies"]);
-        Assert.Equal("reading", result[1]["hobbies"]);
-        Assert.Equal("email", result[2]["contacts.type"]);
-        Assert.Equal("phone", result[3]["contacts.type"]);
-        Assert.Equal("traveling", result[2]["hobbies"]);
-        Assert.Equal("traveling", result[3]["hobbies"]);
+        result[0]["name"].ToString().ShouldBe("John Doe");
+        result[0]["age"].ToString().ShouldBe("30");
+        result[0]["address.street"].ToString().ShouldBe("123 Main St");
+        result[0]["contacts.type"].ToString().ShouldBe("email");
+        result[1]["contacts.type"].ToString().ShouldBe("phone");
+        result[0]["hobbies"].ToString().ShouldBe("reading");
+        result[1]["hobbies"].ToString().ShouldBe("reading");
+        result[2]["contacts.type"].ToString().ShouldBe("email");
+        result[3]["contacts.type"].ToString().ShouldBe("phone");
+        result[2]["hobbies"].ToString().ShouldBe("traveling");
+        result[3]["hobbies"].ToString().ShouldBe("traveling");
 
         // Verify Jane's contact
-        Assert.Equal("Jane Doe", result[4]["name"]);
-        Assert.Equal("skiing", result[4]["hobbies"]);
-        Assert.Equal("jane@example.com", result[4]["contacts.value"]);
+        result[4]["name"].ToString().ShouldBe("Jane Doe");
+        result[4]["hobbies"].ToString().ShouldBe("skiing");
+        result[4]["contacts.value"].ToString().ShouldBe("jane@example.com");
     }
 
     [Fact]
@@ -175,13 +177,13 @@ public class JsonUnrollTests
     {
         // Arrange
         var json = @"{ ""contacts"": [] }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll.Prepare(json);
 
         // Act
         var result = JsonUnroll.Flatten(token);
 
         // Assert
-        Assert.NotEmpty(result);
+        result.ShouldBe([[]]);
     }
 
     [Fact]
@@ -196,15 +198,15 @@ public class JsonUnrollTests
                 ]
             }
         }";
-        var token = JToken.Parse(json);
+        var token = JsonUnroll.Prepare(json);
 
         // Act
         var result = JsonUnroll.Flatten(token);
 
         // Assert
-        Assert.Equal(2, result.Count);
-        Assert.Equal("A", result[0]["level1.level2.level3.value"]);
-        Assert.Equal("B", result[1]["level1.level2.level3.value"]);
+        result.Count.ShouldBe(2);
+        result[0]["level1.level2.level3.value"].ToString().ShouldBe("A");
+        result[1]["level1.level2.level3.value"].ToString().ShouldBe("B");
     }
 
     [Fact]
@@ -213,13 +215,13 @@ public class JsonUnrollTests
         // Arrange
         var json = TestData.LargeJsonArray;
 
-        var token = JToken.Parse(json);
+        var token = JsonUnroll.Prepare(json);
 
         // Act
         var result = JsonUnroll.Flatten(token);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.True(result.Count > 1_000_000);
+        result.ShouldNotBeNull();
+        result.Count.ShouldBeGreaterThan(1_000_000);
     }
 }
